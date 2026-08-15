@@ -135,6 +135,15 @@
     font-size:13px;
     text-align:left;
   }
+  .link-fallback{
+    margin-top:14px;
+  }
+  .link-fallback a{
+    display:none;
+    color:var(--accent);
+    font-size:13px;
+    text-decoration:underline;
+  }
   footer{
     margin-top:20px;
     font-size:11px;
@@ -164,6 +173,7 @@
 
   <div class="timer" id="timer"></div>
   <div class="error-box" id="errorBox">Avisar al Área de Mejora Continua.</div>
+  <div class="link-fallback" id="linkFallback"></div>
 
   <footer>TOP Neumáticos · Área de Mejora Continua</footer>
 </div>
@@ -212,6 +222,7 @@
   async function generarComparador() {
     const key = authInput.value.trim();
     errorBox.style.display = "none";
+    document.getElementById("linkFallback").innerHTML = "";
 
     if (!key) {
       errorBox.style.display = "block";
@@ -245,7 +256,13 @@
       const html = await response.text();
       const blob = new Blob([html], { type: "text/html" });
       const url = URL.createObjectURL(blob);
-      window.open(url, "_blank");
+      const nuevaVentana = window.open(url, "_blank");
+
+      if (!nuevaVentana || nuevaVentana.closed) {
+        const fallback = document.getElementById("linkFallback");
+        fallback.innerHTML = '<a href="' + url + '" target="_blank" rel="noopener">El navegador bloqueó la ventana — abrir el comparador acá</a>';
+        fallback.querySelector("a").style.display = "inline-block";
+      }
     } catch (err) {
       errorBox.style.display = "block";
     } finally {
