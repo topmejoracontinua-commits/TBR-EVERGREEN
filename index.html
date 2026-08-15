@@ -253,7 +253,7 @@
       });
 
       if (response.status === 401 || response.status === 403) {
-        throw new Error("Clave incorrecta o sin autorización (HTTP " + response.status + ").");
+        throw new Error("Avisar al Área de Mejora Continua (HTTP " + response.status + ").");
       }
       if (!response.ok) {
         throw new Error("El workflow respondió con error HTTP " + response.status + ".");
@@ -278,7 +278,7 @@
       showError(
         "No se pudo generar el comparador.\n" +
         err.message +
-        "\n\nVerificá que n8n esté corriendo, que el workflow esté Activo y que el túnel de ngrok esté levantado."
+        "\n\nVerificá que n8n esté corriendo."
       );
     } finally {
       generateBtn.disabled = false;
