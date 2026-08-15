@@ -253,7 +253,7 @@
       });
 
       if (response.status === 401 || response.status === 403) {
-        throw new Error("Avisar al Área de Mejora Continua (HTTP " + response.status + ").");
+        throw new Error("Avisar al Área de Mejora Continua.");
       }
       if (!response.ok) {
         throw new Error("El workflow respondió con error HTTP " + response.status + ".");
@@ -275,11 +275,7 @@
       lastGenEl.textContent = new Date().toLocaleString("es-AR");
     } catch (err) {
       setStatus("Error al generar", "err");
-      showError(
-        "No se pudo generar el comparador.\n" +
-        err.message +
-        "\n\nVerificá que n8n esté corriendo."
-      );
+      showError("Avisar al Área de Mejora Continua.");
     } finally {
       generateBtn.disabled = false;
     }
