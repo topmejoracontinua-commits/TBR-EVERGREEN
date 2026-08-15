@@ -14,7 +14,6 @@
     --ink-dim:#9fb0a6;
     --accent:#4fae7a;
     --accent-dim:#2f6b49;
-    --warn:#d97a4a;
     --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
   }
   *{box-sizing:border-box;}
@@ -27,47 +26,33 @@
     display:flex;
     flex-direction:column;
     align-items:center;
+    justify-content:center;
     min-height:100vh;
-    padding:32px 16px 64px;
+    padding:24px;
   }
-  .wrap{width:100%;max-width:1100px;}
-  header{
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    border-bottom:1px solid var(--line);
-    padding-bottom:16px;
-    margin-bottom:24px;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-  h1{
-    font-size:19px;
-    font-weight:600;
-    letter-spacing:0.2px;
-    margin:0;
-  }
-  h1 span{color:var(--ink-dim);font-weight:400;}
-  .status{
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--ink-dim);
-  }
-  .status.ok{color:var(--accent);}
-  .status.err{color:var(--warn);}
-
-  .panel{
+  .wrap{
+    width:100%;
+    max-width:420px;
     background:var(--panel);
     border:1px solid var(--line);
-    border-radius:10px;
-    padding:20px;
-    margin-bottom:24px;
+    border-radius:12px;
+    padding:32px 28px;
+    text-align:center;
   }
-  .row{
-    display:flex;
-    gap:12px;
-    align-items:center;
-    flex-wrap:wrap;
+  h1{
+    font-size:18px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  h1 span{color:var(--ink-dim);font-weight:400;}
+  .subtitle{
+    font-size:12.5px;
+    color:var(--ink-dim);
+    margin:0 0 24px;
+  }
+  .field{
+    text-align:left;
+    margin-bottom:14px;
   }
   label.field-label{
     font-size:12px;
@@ -75,18 +60,18 @@
     display:block;
     margin-bottom:6px;
   }
-  input[type="password"], input[type="text"]{
+  input[type="password"]{
+    width:100%;
     background:var(--panel-2);
     border:1px solid var(--line);
     color:var(--ink);
-    padding:10px 12px;
+    padding:11px 12px;
     border-radius:6px;
     font-family:var(--mono);
     font-size:13px;
-    min-width:240px;
     outline:none;
   }
-  input[type="password"]:focus, input[type="text"]:focus{
+  input[type="password"]:focus{
     border-color:var(--accent-dim);
   }
   .checkbox-row{
@@ -95,102 +80,95 @@
     gap:6px;
     font-size:12px;
     color:var(--ink-dim);
+    margin-bottom:22px;
+    text-align:left;
   }
   button{
+    width:100%;
     background:var(--accent);
     color:#0b140d;
     border:none;
     font-weight:600;
-    padding:10px 18px;
-    border-radius:6px;
+    padding:13px 18px;
+    border-radius:8px;
     cursor:pointer;
-    font-size:13px;
+    font-size:14px;
     transition:opacity .15s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
   }
   button:hover{opacity:.9;}
   button:disabled{
-    opacity:.5;
+    opacity:.7;
     cursor:not-allowed;
+  }
+  .spinner{
+    width:15px;
+    height:15px;
+    border:2px solid rgba(11,20,13,0.3);
+    border-top-color:#0b140d;
+    border-radius:50%;
+    animation:spin 0.7s linear infinite;
+    display:none;
+  }
+  button.loading .spinner{display:inline-block;}
+  @keyframes spin{
+    to{transform:rotate(360deg);}
+  }
+  .timer{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-dim);
+    margin-top:14px;
+    min-height:16px;
   }
   .error-box{
     display:none;
-    margin-top:14px;
+    margin-top:16px;
     padding:12px 14px;
     background:#2a1610;
     border:1px solid #5a2c1a;
     color:#f0b39a;
     border-radius:6px;
-    font-family:var(--mono);
-    font-size:12.5px;
-    white-space:pre-wrap;
-  }
-  .result-frame-wrap{
-    border:1px solid var(--line);
-    border-radius:10px;
-    overflow:hidden;
-    background:#fff;
-    min-height:60vh;
-    display:flex;
-  }
-  iframe{
-    width:100%;
-    min-height:75vh;
-    border:none;
-    flex:1;
-  }
-  .placeholder{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--ink-dim);
     font-size:13px;
-    padding:60px 20px;
-    background:var(--panel);
+    text-align:left;
   }
   footer{
-    margin-top:24px;
+    margin-top:20px;
     font-size:11px;
     color:var(--ink-dim);
-    text-align:center;
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>Comparador FOB PY <span>· Top Neumáticos</span></h1>
-    <div class="status" id="status">Sin generar</div>
-  </header>
+  <h1>Comparador FOB PY <span>· Top Neumáticos</span></h1>
+  <p class="subtitle">Genera el comparador con los precios y datos más recientes.</p>
 
-  <div class="panel">
-    <div class="row">
-      <div>
-        <label class="field-label" for="authKey">Clave de acceso</label>
-        <input type="password" id="authKey" placeholder="Ingresá la clave" autocomplete="off">
-      </div>
-      <div>
-        <label class="field-label">&nbsp;</label>
-        <button id="generateBtn">Generar comparador</button>
-      </div>
-    </div>
-    <div class="checkbox-row" style="margin-top:12px;">
-      <input type="checkbox" id="rememberKey">
-      <label for="rememberKey">Recordar clave en este navegador</label>
-    </div>
-    <div class="error-box" id="errorBox"></div>
+  <div class="field">
+    <label class="field-label" for="authKey">Clave de acceso</label>
+    <input type="password" id="authKey" placeholder="Ingresá la clave" autocomplete="off">
   </div>
 
-  <div class="result-frame-wrap" id="resultWrap">
-    <div class="placeholder" id="placeholder">El comparador va a aparecer acá una vez generado.</div>
+  <div class="checkbox-row">
+    <input type="checkbox" id="rememberKey">
+    <label for="rememberKey">Recordar clave en este navegador</label>
   </div>
 
-  <footer>Última generación: <span id="lastGen">—</span></footer>
+  <button id="generateBtn">
+    <span class="spinner"></span>
+    <span class="btn-label" id="btnLabel">Generar comparador</span>
+  </button>
+
+  <div class="timer" id="timer"></div>
+  <div class="error-box" id="errorBox">Avisar al Área de Mejora Continua.</div>
+
+  <footer>TOP Neumáticos · Área de Mejora Continua</footer>
 </div>
 
 <script>
-  // Ajustar según el entorno: local con ngrok mientras se prueba, o el dominio
-  // definitivo cuando el workflow quede activo en producción.
   const WEBHOOK_URL = "https://envy-recollect-last.ngrok-free.dev/webhook/FOB-PY";
   const AUTH_HEADER_NAME = "X-Auth-Key";
   const STORAGE_KEY = "fobpy_auth_key";
@@ -198,40 +176,45 @@
   const authInput = document.getElementById("authKey");
   const rememberCheckbox = document.getElementById("rememberKey");
   const generateBtn = document.getElementById("generateBtn");
-  const statusEl = document.getElementById("status");
+  const btnLabel = document.getElementById("btnLabel");
+  const timerEl = document.getElementById("timer");
   const errorBox = document.getElementById("errorBox");
-  const resultWrap = document.getElementById("resultWrap");
-  const placeholder = document.getElementById("placeholder");
-  const lastGenEl = document.getElementById("lastGen");
 
-  // Restaurar clave guardada, si el usuario optó por recordarla
   const savedKey = localStorage.getItem(STORAGE_KEY);
   if (savedKey) {
     authInput.value = savedKey;
     rememberCheckbox.checked = true;
   }
 
-  function setStatus(text, cls) {
-    statusEl.textContent = text;
-    statusEl.className = "status" + (cls ? " " + cls : "");
+  let timerInterval = null;
+  let startTime = null;
+
+  function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+    const seconds = String(totalSeconds % 60).padStart(2, "0");
+    return minutes + ":" + seconds;
   }
 
-  function showError(msg) {
-    errorBox.textContent = msg;
-    errorBox.style.display = "block";
+  function startTimer() {
+    startTime = Date.now();
+    timerEl.textContent = "00:00";
+    timerInterval = setInterval(() => {
+      timerEl.textContent = formatTime(Date.now() - startTime);
+    }, 250);
   }
 
-  function hideError() {
-    errorBox.style.display = "none";
-    errorBox.textContent = "";
+  function stopTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
   }
 
   async function generarComparador() {
     const key = authInput.value.trim();
-    hideError();
+    errorBox.style.display = "none";
 
     if (!key) {
-      showError("Ingresá la clave de acceso antes de continuar.");
+      errorBox.style.display = "block";
       return;
     }
 
@@ -242,43 +225,35 @@
     }
 
     generateBtn.disabled = true;
-    setStatus("Generando…");
+    generateBtn.classList.add("loading");
+    btnLabel.textContent = "Generando…";
+    startTimer();
 
     try {
       const response = await fetch(WEBHOOK_URL, {
-        method: "GET",
+        method: "POST",
         headers: {
           [AUTH_HEADER_NAME]: key,
           "ngrok-skip-browser-warning": "true"
         }
       });
 
-      if (response.status === 401 || response.status === 403) {
-        throw new Error("Avisar al Área de Mejora Continua.");
-      }
       if (!response.ok) {
-        throw new Error("El workflow respondió con error HTTP " + response.status + ".");
+        throw new Error("HTTP " + response.status);
       }
 
       const html = await response.text();
-
-      // Renderizar el HTML devuelto dentro de un iframe aislado
-      placeholder.remove();
-      let iframe = document.getElementById("resultFrame");
-      if (!iframe) {
-        iframe = document.createElement("iframe");
-        iframe.id = "resultFrame";
-        resultWrap.appendChild(iframe);
-      }
-      iframe.srcdoc = html;
-
-      setStatus("Generado correctamente", "ok");
-      lastGenEl.textContent = new Date().toLocaleString("es-AR");
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
     } catch (err) {
-      setStatus("Error al generar", "err");
-      showError("Avisar al Área de Mejora Continua.");
+      errorBox.style.display = "block";
     } finally {
+      stopTimer();
       generateBtn.disabled = false;
+      generateBtn.classList.remove("loading");
+      btnLabel.textContent = "Generar comparador";
+      timerEl.textContent = "";
     }
   }
 
