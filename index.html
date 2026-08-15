@@ -248,7 +248,8 @@
       const response = await fetch(WEBHOOK_URL, {
         method: "GET",
         headers: {
-          [AUTH_HEADER_NAME]: key
+          [AUTH_HEADER_NAME]: key,
+          "ngrok-skip-browser-warning": "true"
         }
       });
 
